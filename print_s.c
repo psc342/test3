@@ -14,13 +14,13 @@ int print_s(char *s, options *opt_list)
     if(opt_list->minus == 1)
         print_size += ft_putstr(s, s_len);
     opt_list->width = opt_list->width - s_len;
-    while (opt_list->width)
+    while (opt_list->width > 0)
     {
-        if (opt_list->zero == 1)
+        if (opt_list->zero == 1 && opt_list->minus != 1)
             print_size += ft_putchar('0');
         else
             print_size += ft_putchar(' ');
-        opt_list->width--;
+        opt_list->width = opt_list->width - 1;
     }
     if(opt_list->minus == 0)
         print_size += ft_putstr(s, s_len);

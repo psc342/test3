@@ -32,7 +32,10 @@ void	ft_putnbr(int n)
 	char	c;
 	
 	if (n == -2147483648)
+	{
 		write(1, "-2147483648", 11);
+		return ;
+	}
 	else if (n < 0)
 	{
 		write(1, "-", 1);
@@ -65,14 +68,11 @@ void	ft_putunsigned(unsigned int n)
 	return ;
 }
 
-unsigned int	ft_unsignedintlen(unsigned int n)
+int	ft_unsignedintlen(unsigned int n)
 {
-	unsigned int uint_len;
+	int uint_len;
 
 	uint_len = 1;
-	if (n == 4294967295)
-		return 1;
-
 	while (n >= 10)
 	{
 		uint_len++;

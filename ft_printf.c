@@ -6,8 +6,10 @@ int					print2(va_list ap, options *opt_list)
 	int print_size;
 
 	print_size = 0;
-	if (opt_list->type == 'c' || opt_list->type == '%')
+	if (opt_list->type == 'c')
 		print_size = print_c(va_arg(ap, int), opt_list);
+	else if (opt_list->type == '%')
+		print_size = print_per(opt_list);
 	else if (opt_list->type == 's')
 		print_size = print_s(va_arg(ap, char *), opt_list);
 	else if (opt_list->type == 'd' || opt_list->type == 'i')
@@ -31,7 +33,7 @@ void wid_and_pre(va_list ap, int i, char *format, options *opt_list)
 		else
 			opt_list->precision = opt_list->precision * 10 + (format[i] - '0');
 	}
-	else
+	else if (format[i] == '*')
 	{
 		if (opt_list->dot == 0)
 		{
@@ -44,6 +46,8 @@ void wid_and_pre(va_list ap, int i, char *format, options *opt_list)
 		}
 		else
 			opt_list->precision = va_arg(ap, int);
+			if (opt_list->precision < 0)
+				opt_list->dot =0;
 	}
 }
 
@@ -63,8 +67,9 @@ int parsing(va_list ap, int i, char *format, options *opt_list)
 			wid_and_pre(ap, i, format, opt_list);
 		i++;
 	}
-	opt_list->type = format[i];
-
+	if (ft_strchr("dsciupxX%", format[i]) != 0)
+		opt_list->type = format[i];
+	
 	return (i);
 }
 
@@ -77,9 +82,9 @@ int printf1(va_list ap, char *format)
 
 	i = 0;
 	print_size = 0;
-	while(format[i] != '\0')
+	while(format[i] != '\0' && i >= 0)
 	{
-		if(format[i] == '%')
+		if(format[i] == '%' && format[i + 1] != '\0')
 		{
 			opt_init(&opt_list);
 			i = parsing(ap, i, format, &opt_list);
@@ -103,19 +108,3 @@ int ft_printf(const char *format, ...)
 
 	return (print_size);
 }
-
-
-
-// int main()
-// {
-// 	int a;
-// 	int b;
-// 	int c;
-// 	c = 10;
-
-// 	a = ft_printf("d=|%-10p|", -1);
-// 	printf("\na = %d",a);
-// 	printf("\n---------------\n");
-// 	b = printf("d=|%-10p|", -1);
-// 	printf("\nb = %d",b);	
-// }

@@ -1,12 +1,12 @@
 #include "ft_printf.h"
 
-int print_c(int c, options *opt_list)
+int print_per(options *opt_list)
 {
     int print_size;
 
     print_size = 0;
-    if(opt_list->minus == 1 && opt_list->type == 'c')
-        print_size += ft_putchar(c);
+    if(opt_list->minus == 1 && opt_list->type == '%')
+        print_size += ft_putchar('%');
     opt_list->width--;
     while (opt_list->width > 0)
     {
@@ -16,7 +16,7 @@ int print_c(int c, options *opt_list)
             print_size += ft_putchar(' ');
         opt_list->width--;
     }
-    if(opt_list->minus == 0 && opt_list->type == 'c')
-        print_size += ft_putchar(c);
+    if(opt_list->minus == 0 && opt_list->type == '%')
+        print_size += ft_putchar('%');
     return (print_size);
 }
